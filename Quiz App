@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cybersecurity Quiz // Jia</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --panel: #111820;
+    --border: #1f2a35;
+    --green: #3fd97f;
+    --amber: #f2b544;
+    --red: #ff5c5c;
+    --text: #c9d1d9;
+    --muted: #6e7681;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Consolas", "SF Mono", "Courier New", monospace;
+    display: flex;
+    justify-content: center;
+    padding: 40px 16px;
+    min-height: 100vh;
+  }
+
+  .terminal {
+    width: 100%;
+    max-width: 640px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .titlebar {
+    background: #161c24;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .dot { width: 11px; height: 11px; border-radius: 50%; }
+  .dot.r { background: #ff5f56; }
+  .dot.y { background: #ffbd2e; }
+  .dot.g { background: #27c93f; }
+
+  .titlebar span {
+    margin-left: 8px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .screen {
+    padding: 28px 24px;
+  }
+
+  .prompt-line {
+    color: var(--green);
+    font-size: 13px;
+    margin: 0;
+  }
+
+  .prompt-line::before {
+    content: "$ ";
+  }
+
+  .meta-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  }
+
+  .tag {
+    font-size: 11px;
+    padding: 2px 9px;
+    border-radius: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .tag-easy { background: rgba(63, 217, 127, 0.12); color: var(--green); }
+  .tag-medium { background: rgba(242, 181, 68, 0.14); color: var(--amber); }
+  .tag-hard { background: rgba(255, 92, 92, 0.12); color: var(--red); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    #screen > * { animation: fadeIn 0.25s ease both; }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  h1 {
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0 0 4px;
+    color: var(--text);
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 13px;
+    margin: 0 0 24px;
+  }
+
+  .progress {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 20px;
+  }
+
+  .progress-dot {
+    height: 4px;
+    flex: 1;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-dot.done { background: var(--green); }
+  .progress-dot.current { background: var(--amber); }
+
+  .question {
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .option {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text);
+    text-align: left;
+    padding: 12px 14px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 14px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+
+  .option:hover:not(:disabled) {
+    border-color: var(--green);
+    background: rgba(63, 217, 127, 0.06);
+  }
+
+  .option:disabled {
+    cursor: default;
+  }
+
+  .option.correct {
+    border-color: var(--green);
+    background: rgba(63, 217, 127, 0.12);
+    color: var(--green);
+  }
+
+  .option.wrong {
+    border-color: var(--red);
+    background: rgba(255, 92, 92, 0.1);
+    color: var(--red);
+  }
+
+  .feedback {
+    margin-top: 16px;
+    font-size: 13px;
+    color: var(--muted);
+    min-height: 20px;
+  }
+
+  .next-btn {
+    margin-top: 20px;
+    background: var(--green);
+    color: #0d1117;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-weight: 500;
+    font-size: 13px;
+    cursor: pointer;
+    display: none;
+  }
+
+  .next-btn.show { display: inline-block; }
+
+  .result {
+    text-align: center;
+  }
+
+  .result .score {
+    font-size: 42px;
+    color: var(--green);
+    margin: 12px 0 4px;
+  }
+
+  .result .score-label {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+
+  .result p.verdict {
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+
+  .restart-btn {
+    background: transparent;
+    border: 1px solid var(--green);
+    color: var(--green);
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 13px;
+    cursor: pointer;
+  }
+
+  .restart-btn:hover {
+    background: rgba(63, 217, 127, 0.08);
+  }
+</style>
+</head>
+<body>
+
+<div class="terminal">
+  <div class="titlebar">
+    <div class="dot r"></div>
+    <div class="dot y"></div>
+    <div class="dot g"></div>
+    <span>quiz.sh</span>
+  </div>
+
+  <div class="screen" id="screen">
+    <!-- JS fills this in -->
+  </div>
+</div>
+
+<script>
+  // ---- 1. THE DATA ----
+  // Each question has: the question text, a difficulty tag,
+  // an array of options, and the EXACT TEXT of the correct answer
+  // (not a position — that's what caused the bug before. We shuffle
+  // the options every time we show a question, so a fixed index
+  // like "correct: 1" would break the moment the order changed.)
+  const questions = [
+    {
+      question: "What does \"phishing\" mean?",
+      difficulty: "easy",
+      options: [
+        "A virus that deletes your files",
+        "A fake message tricking you into giving up information",
+        "A firewall setting",
+        "A type of strong password"
+      ],
+      correct: "A fake message tricking you into giving up information"
+    },
+    {
+      question: "Which of these is the strongest password?",
+      difficulty: "easy",
+      options: [
+        "password123",
+        "Karachi2024",
+        "tR!9kLp#2mQz",
+        "12345678"
+      ],
+      correct: "tR!9kLp#2mQz"
+    },
+    {
+      question: "What is two-factor authentication (2FA)?",
+      difficulty: "easy",
+      options: [
+        "Using two different passwords",
+        "A second verification step, like a code sent to your phone",
+        "Logging in twice",
+        "A type of antivirus software"
+      ],
+      correct: "A second verification step, like a code sent to your phone"
+    },
+    {
+      question: "You get an email from your \"bank\" asking you to confirm your PIN by replying. What should you do?",
+      difficulty: "medium",
+      options: [
+        "Reply with the PIN since it's your bank",
+        "Ignore it and report or delete it",
+        "Forward it to friends to warn them",
+        "Click the link to check if it's real"
+      ],
+      correct: "Ignore it and report or delete it"
+    },
+    {
+      question: "What does HTTPS in a website URL indicate?",
+      difficulty: "easy",
+      options: [
+        "The site loads faster",
+        "The connection between you and the site is encrypted",
+        "The site has no ads",
+        "The site is owned by Google"
+      ],
+      correct: "The connection between you and the site is encrypted"
+    },
+    {
+      question: "What is a VPN mainly used for?",
+      difficulty: "medium",
+      options: [
+        "Making your internet connection faster",
+        "Encrypting and rerouting your traffic for privacy",
+        "Blocking all ads permanently",
+        "Backing up your files automatically"
+      ],
+      correct: "Encrypting and rerouting your traffic for privacy"
+    },
+    {
+      question: "What is \"social engineering\" in cybersecurity?",
+      difficulty: "medium",
+      options: [
+        "Building secure software architecture",
+        "Manipulating people into revealing information or access",
+        "A network engineering degree",
+        "Designing a company's org chart"
+      ],
+      correct: "Manipulating people into revealing information or access"
+    },
+    {
+      question: "Which practice reduces damage if one of your passwords gets leaked?",
+      difficulty: "hard",
+      options: [
+        "Using the same password everywhere for consistency",
+        "Using a unique password for every account",
+        "Writing all passwords in one unprotected text file",
+        "Changing your username instead of your password"
+      ],
+      correct: "Using a unique password for every account"
+    }
+  ];
+
+  // ---- 2. THE STATE ----
+  // These variables track where the user currently is in the quiz.
+  let currentIndex = 0;
+  let score = 0;
+  let streak = 0;
+  let bestStreak = 0;
+  let answered = false;
+  let shuffledOptions = []; // holds this question's options in randomized order
+
+  const screen = document.getElementById("screen");
+
+  // Fisher-Yates shuffle — returns a new shuffled copy, doesn't mutate the original
+  function shuffle(array) {
+    const copy = [...array];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }
+
+  // ---- 3. RENDER FUNCTIONS ----
+
+  function renderIntro() {
+    screen.innerHTML = `
+      <p class="prompt-line">initializing quiz module...</p>
+      <h1>Cybersecurity awareness quiz</h1>
+      <p class="subtitle">${questions.length} questions &middot; test your instincts</p>
+      <button class="next-btn show" onclick="startQuiz()">Start quiz</button>
+    `;
+  }
+
+  function renderQuestion() {
+    answered = false;
+    const q = questions[currentIndex];
+
+    // Shuffle the options fresh each time this question is shown,
+    // so the correct answer lands in a different spot every run.
+    shuffledOptions = shuffle(q.options);
+
+    // Build the progress bar dots
+    let dotsHtml = "";
+    for (let i = 0; i < questions.length; i++) {
+      let cls = "progress-dot";
+      if (i < currentIndex) cls += " done";
+      if (i === currentIndex) cls += " current";
+      dotsHtml += `<div class="${cls}"></div>`;
+    }
+
+    // Build the option buttons — index here just refers to shuffledOptions
+    let optionsHtml = "";
+    shuffledOptions.forEach((opt, i) => {
+      optionsHtml += `<button class="option" onclick="selectOption(${i})">${opt}</button>`;
+    });
+
+    screen.innerHTML = `
+      <div class="meta-row">
+        <p class="prompt-line">question ${currentIndex + 1} of ${questions.length}</p>
+        <span class="tag tag-${q.difficulty}">${q.difficulty}</span>
+      </div>
+      <div class="progress">${dotsHtml}</div>
+      <p class="question">${q.question}</p>
+      <div class="options" id="options">${optionsHtml}</div>
+      <p class="feedback" id="feedback"></p>
+      <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next &rarr;</button>
+    `;
+  }
+
+  function renderResult() {
+    const pct = Math.round((score / questions.length) * 100);
+    let verdict = "Solid instincts. Keep sharpening them.";
+    if (pct === 100) verdict = "Perfect score. You'd spot a phishing email in your sleep.";
+    else if (pct < 50) verdict = "Worth a review — small habits prevent big breaches.";
+
+    screen.innerHTML = `
+      <div class="result">
+        <p class="prompt-line">quiz complete</p>
+        <p class="score">${score}/${questions.length}</p>
+        <p class="score-label">${pct}% correct &middot; best streak: ${bestStreak}</p>
+        <p class="verdict">${verdict}</p>
+        <button class="restart-btn" onclick="restartQuiz()">Try again</button>
+      </div>
+    `;
+  }
+
+  // ---- 4. ACTIONS ----
+
+  function startQuiz() {
+    currentIndex = 0;
+    score = 0;
+    streak = 0;
+    bestStreak = 0;
+    renderQuestion();
+  }
+
+  function selectOption(selectedIndex) {
+    if (answered) return; // ignore clicks after the question is answered
+    answered = true;
+
+    const q = questions[currentIndex];
+    const selectedText = shuffledOptions[selectedIndex];
+    const isCorrect = selectedText === q.correct;
+
+    const buttons = document.querySelectorAll("#options .option");
+    const feedback = document.getElementById("feedback");
+    const nextBtn = document.getElementById("nextBtn");
+
+    buttons.forEach((btn, i) => {
+      btn.disabled = true;
+      if (shuffledOptions[i] === q.correct) btn.classList.add("correct");
+      if (i === selectedIndex && !isCorrect) btn.classList.add("wrong");
+    });
+
+    if (isCorrect) {
+      score++;
+      streak++;
+      bestStreak = Math.max(bestStreak, streak);
+      feedback.textContent = streak > 1 ? `Correct — streak of ${streak}.` : "Correct.";
+      feedback.style.color = "var(--green)";
+    } else {
+      streak = 0;
+      feedback.textContent = "Not quite — the right answer is highlighted above.";
+      feedback.style.color = "var(--red)";
+    }
+
+    nextBtn.classList.add("show");
+  }
+
+  function nextQuestion() {
+    currentIndex++;
+    if (currentIndex < questions.length) {
+      renderQuestion();
+    } else {
+      renderResult();
+    }
+  }
+
+  function restartQuiz() {
+    renderIntro();
+  }
+
+  // ---- 5. START ----
+  renderIntro();
+</script>
+
+</body>
+</html>
