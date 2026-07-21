@@ -8,10 +8,12 @@
   :root {
     --bg: #0d1117;
     --panel: #111820;
+    --panel-alt: #0f151d;
     --border: #1f2a35;
     --green: #3fd97f;
     --amber: #f2b544;
     --red: #ff5c5c;
+    --blue: #5db8ff;
     --text: #c9d1d9;
     --muted: #6e7681;
   }
@@ -58,9 +60,7 @@
     font-size: 13px;
   }
 
-  .screen {
-    padding: 28px 24px;
-  }
+  .screen { padding: 28px 24px; }
 
   .prompt-line {
     color: var(--green);
@@ -68,10 +68,57 @@
     margin: 0;
   }
 
-  .prompt-line::before {
-    content: "$ ";
+  .prompt-line::before { content: "$ "; }
+
+  h1 {
+    font-size: 18px;
+    font-weight: 500;
+    margin: 10px 0 4px;
+    color: var(--text);
   }
 
+  .subtitle {
+    color: var(--muted);
+    font-size: 13px;
+    margin: 0 0 24px;
+  }
+
+  /* --- Difficulty select screen --- */
+  .level-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .level-card {
+    background: var(--panel-alt);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    text-align: left;
+    cursor: pointer;
+    color: var(--text);
+    font-family: inherit;
+    transition: border-color 0.15s ease, transform 0.1s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .level-card:hover { transform: translateX(2px); }
+
+  .level-card .name { font-size: 14px; font-weight: 500; margin: 0 0 2px; }
+  .level-card .desc { font-size: 12px; color: var(--muted); margin: 0; }
+  .level-card .count { font-size: 11px; color: var(--muted); white-space: nowrap; }
+
+  .level-card.easy:hover { border-color: var(--green); }
+  .level-card.medium:hover { border-color: var(--amber); }
+  .level-card.hard:hover { border-color: var(--red); }
+  .level-card.mixed:hover { border-color: var(--blue); }
+
+  /* --- Question screen --- */
   .meta-row {
     display: flex;
     align-items: center;
@@ -90,28 +137,6 @@
   .tag-easy { background: rgba(63, 217, 127, 0.12); color: var(--green); }
   .tag-medium { background: rgba(242, 181, 68, 0.14); color: var(--amber); }
   .tag-hard { background: rgba(255, 92, 92, 0.12); color: var(--red); }
-
-  @media (prefers-reduced-motion: no-preference) {
-    #screen > * { animation: fadeIn 0.25s ease both; }
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(4px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  h1 {
-    font-size: 18px;
-    font-weight: 500;
-    margin: 0 0 4px;
-    color: var(--text);
-  }
-
-  .subtitle {
-    color: var(--muted);
-    font-size: 13px;
-    margin: 0 0 24px;
-  }
 
   .progress {
     display: flex;
@@ -160,9 +185,7 @@
     background: rgba(63, 217, 127, 0.06);
   }
 
-  .option:disabled {
-    cursor: default;
-  }
+  .option:disabled { cursor: default; }
 
   .option.correct {
     border-color: var(--green);
@@ -199,14 +222,14 @@
 
   .next-btn.show { display: inline-block; }
 
-  .result {
-    text-align: center;
-  }
+  /* --- Results screen --- */
+  .result { text-align: center; }
 
   .result .score {
-    font-size: 42px;
+    font-size: 44px;
     color: var(--green);
-    margin: 12px 0 4px;
+    margin: 14px 0 2px;
+    font-weight: 500;
   }
 
   .result .score-label {
@@ -215,24 +238,81 @@
     margin-bottom: 20px;
   }
 
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 0 0 22px;
+  }
+
+  .stat-card {
+    background: var(--panel-alt);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 8px;
+  }
+
+  .stat-card .value { font-size: 18px; color: var(--text); font-weight: 500; }
+  .stat-card .label { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  .bar-track {
+    height: 8px;
+    background: var(--panel-alt);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 22px;
+  }
+
+  .bar-fill {
+    height: 100%;
+    background: var(--green);
+    transition: width 0.5s ease;
+  }
+
   .result p.verdict {
     font-size: 14px;
     margin-bottom: 24px;
+    text-align: left;
   }
 
-  .restart-btn {
-    background: transparent;
-    border: 1px solid var(--green);
-    color: var(--green);
-    padding: 10px 18px;
+  .action-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  .restart-btn, .change-level-btn {
+    padding: 10px 16px;
     border-radius: 6px;
     font-family: inherit;
     font-size: 13px;
     cursor: pointer;
   }
 
-  .restart-btn:hover {
-    background: rgba(63, 217, 127, 0.08);
+  .restart-btn {
+    background: transparent;
+    border: 1px solid var(--green);
+    color: var(--green);
+  }
+
+  .restart-btn:hover { background: rgba(63, 217, 127, 0.08); }
+
+  .change-level-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  .change-level-btn:hover { border-color: var(--text); color: var(--text); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    #screen > * { animation: fadeIn 0.25s ease both; }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 </style>
 </head>
@@ -245,122 +325,187 @@
     <div class="dot g"></div>
     <span>quiz.sh</span>
   </div>
-
-  <div class="screen" id="screen">
-    <!-- JS fills this in -->
-  </div>
+  <div class="screen" id="screen"></div>
 </div>
 
 <script>
   // ---- 1. THE DATA ----
-  // Each question has: the question text, a difficulty tag,
-  // an array of options, and the EXACT TEXT of the correct answer
-  // (not a position — that's what caused the bug before. We shuffle
-  // the options every time we show a question, so a fixed index
-  // like "correct: 1" would break the moment the order changed.)
-  const questions = [
-    {
-      question: "What does \"phishing\" mean?",
-      difficulty: "easy",
-      options: [
-        "A virus that deletes your files",
-        "A fake message tricking you into giving up information",
-        "A firewall setting",
-        "A type of strong password"
-      ],
-      correct: "A fake message tricking you into giving up information"
-    },
-    {
-      question: "Which of these is the strongest password?",
-      difficulty: "easy",
-      options: [
-        "password123",
-        "Karachi2024",
-        "tR!9kLp#2mQz",
-        "12345678"
-      ],
-      correct: "tR!9kLp#2mQz"
-    },
-    {
-      question: "What is two-factor authentication (2FA)?",
-      difficulty: "easy",
-      options: [
-        "Using two different passwords",
-        "A second verification step, like a code sent to your phone",
-        "Logging in twice",
-        "A type of antivirus software"
-      ],
-      correct: "A second verification step, like a code sent to your phone"
-    },
-    {
-      question: "You get an email from your \"bank\" asking you to confirm your PIN by replying. What should you do?",
-      difficulty: "medium",
-      options: [
-        "Reply with the PIN since it's your bank",
-        "Ignore it and report or delete it",
-        "Forward it to friends to warn them",
-        "Click the link to check if it's real"
-      ],
-      correct: "Ignore it and report or delete it"
-    },
-    {
-      question: "What does HTTPS in a website URL indicate?",
-      difficulty: "easy",
-      options: [
-        "The site loads faster",
-        "The connection between you and the site is encrypted",
-        "The site has no ads",
-        "The site is owned by Google"
-      ],
-      correct: "The connection between you and the site is encrypted"
-    },
-    {
-      question: "What is a VPN mainly used for?",
-      difficulty: "medium",
-      options: [
-        "Making your internet connection faster",
-        "Encrypting and rerouting your traffic for privacy",
-        "Blocking all ads permanently",
-        "Backing up your files automatically"
-      ],
-      correct: "Encrypting and rerouting your traffic for privacy"
-    },
-    {
-      question: "What is \"social engineering\" in cybersecurity?",
-      difficulty: "medium",
-      options: [
-        "Building secure software architecture",
-        "Manipulating people into revealing information or access",
-        "A network engineering degree",
-        "Designing a company's org chart"
-      ],
-      correct: "Manipulating people into revealing information or access"
-    },
-    {
-      question: "Which practice reduces damage if one of your passwords gets leaked?",
-      difficulty: "hard",
-      options: [
-        "Using the same password everywhere for consistency",
-        "Using a unique password for every account",
-        "Writing all passwords in one unprotected text file",
-        "Changing your username instead of your password"
-      ],
-      correct: "Using a unique password for every account"
-    }
+  // Every question has a difficulty level, a shuffled-at-render options
+  // list, and the CORRECT ANSWER stored as text (not a position) so
+  // shuffling never breaks it.
+  const questionBank = {
+    easy: [
+      {
+        question: "What does \"phishing\" mean?",
+        options: [
+          "A virus that deletes your files",
+          "A fake message tricking you into giving up information",
+          "A firewall setting",
+          "A type of strong password"
+        ],
+        correct: "A fake message tricking you into giving up information"
+      },
+      {
+        question: "Which of these is the strongest password?",
+        options: ["password123", "Karachi2024", "tR!9kLp#2mQz", "12345678"],
+        correct: "tR!9kLp#2mQz"
+      },
+      {
+        question: "What is two-factor authentication (2FA)?",
+        options: [
+          "Using two different passwords",
+          "A second verification step, like a code sent to your phone",
+          "Logging in twice",
+          "A type of antivirus software"
+        ],
+        correct: "A second verification step, like a code sent to your phone"
+      },
+      {
+        question: "What does HTTPS in a website URL indicate?",
+        options: [
+          "The site loads faster",
+          "The connection between you and the site is encrypted",
+          "The site has no ads",
+          "The site is owned by Google"
+        ],
+        correct: "The connection between you and the site is encrypted"
+      },
+      {
+        question: "What's the safest thing to do with an unexpected email attachment from an unknown sender?",
+        options: [
+          "Open it to see what it is",
+          "Forward it to a friend first",
+          "Don't open it, and delete or report it",
+          "Rename the file before opening"
+        ],
+        correct: "Don't open it, and delete or report it"
+      }
+    ],
+    medium: [
+      {
+        question: "You get an email from your \"bank\" asking you to confirm your PIN by replying. What should you do?",
+        options: [
+          "Reply with the PIN since it's your bank",
+          "Ignore it and report or delete it",
+          "Forward it to friends to warn them",
+          "Click the link to check if it's real"
+        ],
+        correct: "Ignore it and report or delete it"
+      },
+      {
+        question: "What is a VPN mainly used for?",
+        options: [
+          "Making your internet connection faster",
+          "Encrypting and rerouting your traffic for privacy",
+          "Blocking all ads permanently",
+          "Backing up your files automatically"
+        ],
+        correct: "Encrypting and rerouting your traffic for privacy"
+      },
+      {
+        question: "What is \"social engineering\" in cybersecurity?",
+        options: [
+          "Building secure software architecture",
+          "Manipulating people into revealing information or access",
+          "A network engineering degree",
+          "Designing a company's org chart"
+        ],
+        correct: "Manipulating people into revealing information or access"
+      },
+      {
+        question: "What's the main purpose of a firewall?",
+        options: [
+          "To speed up your internet",
+          "To monitor and control incoming/outgoing network traffic",
+          "To store backup copies of files",
+          "To compress large files"
+        ],
+        correct: "To monitor and control incoming/outgoing network traffic"
+      },
+      {
+        question: "Why is public Wi-Fi risky for online banking?",
+        options: [
+          "It's usually too slow to load banking sites",
+          "Attackers on the same network can potentially intercept your traffic",
+          "Banks block public Wi-Fi automatically",
+          "It uses too much mobile data"
+        ],
+        correct: "Attackers on the same network can potentially intercept your traffic"
+      }
+    ],
+    hard: [
+      {
+        question: "Which practice reduces damage if one of your passwords gets leaked?",
+        options: [
+          "Using the same password everywhere for consistency",
+          "Using a unique password for every account",
+          "Writing all passwords in one unprotected text file",
+          "Changing your username instead of your password"
+        ],
+        correct: "Using a unique password for every account"
+      },
+      {
+        question: "What does a SQL injection attack exploit?",
+        options: [
+          "Weak Wi-Fi encryption",
+          "Unsanitized user input passed directly into database queries",
+          "Outdated browser plugins",
+          "Slow server response times"
+        ],
+        correct: "Unsanitized user input passed directly into database queries"
+      },
+      {
+        question: "What is the main difference between a virus and a worm?",
+        options: [
+          "Worms need a host file to spread, viruses don't",
+          "Viruses need a host file to attach to; worms self-replicate and spread independently",
+          "There is no real difference",
+          "Worms only affect mobile devices"
+        ],
+        correct: "Viruses need a host file to attach to; worms self-replicate and spread independently"
+      },
+      {
+        question: "In a zero-day vulnerability, what does \"zero-day\" refer to?",
+        options: [
+          "A flaw discovered and exploited before the vendor has released a fix",
+          "An attack that takes zero days to plan",
+          "A vulnerability that only lasts 24 hours",
+          "A bug that causes zero downtime"
+        ],
+        correct: "A flaw discovered and exploited before the vendor has released a fix"
+      },
+      {
+        question: "What does \"principle of least privilege\" mean in access control?",
+        options: [
+          "Everyone should have admin access by default",
+          "Users/systems should only get the minimum access needed to do their job",
+          "Only the least experienced staff need permissions",
+          "Privileges should be reviewed once a year"
+        ],
+        correct: "Users/systems should only get the minimum access needed to do their job"
+      }
+    ]
+  };
+
+  const levels = [
+    { key: "easy", name: "Easy", desc: "Core basics — good starting point.", color: "var(--green)" },
+    { key: "medium", name: "Medium", desc: "Everyday security judgment calls.", color: "var(--amber)" },
+    { key: "hard", name: "Hard", desc: "Terminology and attacker mindset.", color: "var(--red)" },
+    { key: "mixed", name: "Mixed", desc: "A random spread across all levels.", color: "var(--blue)" }
   ];
 
-  // ---- 2. THE STATE ----
-  // These variables track where the user currently is in the quiz.
+  // ---- 2. STATE ----
+  let questions = [];       // the active question set for this run
   let currentIndex = 0;
   let score = 0;
   let streak = 0;
   let bestStreak = 0;
   let answered = false;
-  let shuffledOptions = []; // holds this question's options in randomized order
+  let shuffledOptions = [];
+  let selectedLevel = "easy";
 
   const screen = document.getElementById("screen");
 
-  // Fisher-Yates shuffle — returns a new shuffled copy, doesn't mutate the original
   function shuffle(array) {
     const copy = [...array];
     for (let i = copy.length - 1; i > 0; i--) {
@@ -376,20 +521,31 @@
     screen.innerHTML = `
       <p class="prompt-line">initializing quiz module...</p>
       <h1>Cybersecurity awareness quiz</h1>
-      <p class="subtitle">${questions.length} questions &middot; test your instincts</p>
-      <button class="next-btn show" onclick="startQuiz()">Start quiz</button>
+      <p class="subtitle">Choose a difficulty to begin.</p>
+      <div class="level-grid">
+        ${levels.map(lvl => {
+          const count = lvl.key === "mixed"
+            ? questionBank.easy.length + questionBank.medium.length + questionBank.hard.length
+            : questionBank[lvl.key].length;
+          return `
+            <button class="level-card ${lvl.key}" onclick="startQuiz('${lvl.key}')">
+              <div>
+                <p class="name" style="color:${lvl.color}">${lvl.name}</p>
+                <p class="desc">${lvl.desc}</p>
+              </div>
+              <span class="count">${lvl.key === "mixed" ? 8 : count} Qs</span>
+            </button>
+          `;
+        }).join("")}
+      </div>
     `;
   }
 
   function renderQuestion() {
     answered = false;
     const q = questions[currentIndex];
-
-    // Shuffle the options fresh each time this question is shown,
-    // so the correct answer lands in a different spot every run.
     shuffledOptions = shuffle(q.options);
 
-    // Build the progress bar dots
     let dotsHtml = "";
     for (let i = 0; i < questions.length; i++) {
       let cls = "progress-dot";
@@ -398,7 +554,6 @@
       dotsHtml += `<div class="${cls}"></div>`;
     }
 
-    // Build the option buttons — index here just refers to shuffledOptions
     let optionsHtml = "";
     shuffledOptions.forEach((opt, i) => {
       optionsHtml += `<button class="option" onclick="selectOption(${i})">${opt}</button>`;
@@ -425,18 +580,41 @@
 
     screen.innerHTML = `
       <div class="result">
-        <p class="prompt-line">quiz complete</p>
+        <p class="prompt-line">quiz complete &middot; ${selectedLevel}</p>
         <p class="score">${score}/${questions.length}</p>
-        <p class="score-label">${pct}% correct &middot; best streak: ${bestStreak}</p>
+        <p class="score-label">${pct}% correct</p>
+        <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
+        <div class="stat-grid">
+          <div class="stat-card"><div class="value">${score}</div><div class="label">Correct</div></div>
+          <div class="stat-card"><div class="value">${questions.length - score}</div><div class="label">Missed</div></div>
+          <div class="stat-card"><div class="value">${bestStreak}</div><div class="label">Best streak</div></div>
+        </div>
         <p class="verdict">${verdict}</p>
-        <button class="restart-btn" onclick="restartQuiz()">Try again</button>
+        <div class="action-row">
+          <button class="restart-btn" onclick="startQuiz(selectedLevel)">Retry ${selectedLevel}</button>
+          <button class="change-level-btn" onclick="renderIntro()">Change level</button>
+        </div>
       </div>
     `;
   }
 
   // ---- 4. ACTIONS ----
 
-  function startQuiz() {
+  function buildQuestionSet(levelKey) {
+    if (levelKey === "mixed") {
+      const all = [
+        ...questionBank.easy.map(q => ({ ...q, difficulty: "easy" })),
+        ...questionBank.medium.map(q => ({ ...q, difficulty: "medium" })),
+        ...questionBank.hard.map(q => ({ ...q, difficulty: "hard" }))
+      ];
+      return shuffle(all).slice(0, 8);
+    }
+    return questionBank[levelKey].map(q => ({ ...q, difficulty: levelKey }));
+  }
+
+  function startQuiz(levelKey) {
+    selectedLevel = levelKey;
+    questions = buildQuestionSet(levelKey);
     currentIndex = 0;
     score = 0;
     streak = 0;
@@ -445,7 +623,7 @@
   }
 
   function selectOption(selectedIndex) {
-    if (answered) return; // ignore clicks after the question is answered
+    if (answered) return;
     answered = true;
 
     const q = questions[currentIndex];
@@ -484,10 +662,6 @@
     } else {
       renderResult();
     }
-  }
-
-  function restartQuiz() {
-    renderIntro();
   }
 
   // ---- 5. START ----
