@@ -4,118 +4,129 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cybersecurity Quiz // Jia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0d1117;
-    --panel: #111820;
-    --panel-alt: #0f151d;
-    --border: #1f2a35;
-    --green: #3fd97f;
-    --amber: #f2b544;
-    --red: #ff5c5c;
-    --blue: #5db8ff;
-    --text: #c9d1d9;
-    --muted: #6e7681;
+    --pink: #ff6f9c;
+    --pink-soft: #ffe1ec;
+    --purple: #9b6bff;
+    --purple-soft: #ece3ff;
+    --teal: #22c1b4;
+    --teal-soft: #d9f9f4;
+    --orange: #ff9f43;
+    --orange-soft: #fff0dc;
+    --yellow: #ffd166;
+    --ink: #3a2e4d;
+    --muted: #8b7fa3;
+    --card: #ffffff;
   }
+
   * { box-sizing: border-box; }
 
   body {
     margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: "Consolas", "SF Mono", "Courier New", monospace;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #fff1f7 0%, #f2ecff 45%, #e3fbf7 100%);
+    color: var(--ink);
+    font-family: "Quicksand", "Baloo 2", sans-serif;
     display: flex;
     justify-content: center;
     padding: 40px 16px;
-    min-height: 100vh;
   }
 
-  .terminal {
+  .app-card {
     width: 100%;
     max-width: 640px;
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 8px;
+    background: var(--card);
+    border-radius: 28px;
+    box-shadow: 0 20px 50px rgba(155, 107, 255, 0.16), 0 4px 12px rgba(255, 111, 156, 0.08);
     overflow: hidden;
   }
 
   .titlebar {
-    background: #161c24;
-    padding: 10px 16px;
+    background: linear-gradient(120deg, var(--pink), var(--purple));
+    padding: 18px 24px;
     display: flex;
     align-items: center;
-    gap: 8px;
-    border-bottom: 1px solid var(--border);
+    gap: 10px;
   }
 
-  .dot { width: 11px; height: 11px; border-radius: 50%; }
-  .dot.r { background: #ff5f56; }
-  .dot.y { background: #ffbd2e; }
-  .dot.g { background: #27c93f; }
+  .titlebar .emoji { font-size: 22px; }
 
   .titlebar span {
-    margin-left: 8px;
-    color: var(--muted);
-    font-size: 13px;
+    color: #fff;
+    font-family: "Baloo 2", sans-serif;
+    font-weight: 700;
+    font-size: 16px;
   }
 
-  .screen { padding: 28px 24px; }
+  .screen { padding: 30px 26px; }
 
   .prompt-line {
-    color: var(--green);
+    color: var(--purple);
+    font-weight: 700;
     font-size: 13px;
     margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
   }
 
-  .prompt-line::before { content: "$ "; }
-
   h1 {
-    font-size: 18px;
-    font-weight: 500;
-    margin: 10px 0 4px;
-    color: var(--text);
+    font-family: "Baloo 2", sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 8px 0 4px;
+    color: var(--ink);
   }
 
   .subtitle {
     color: var(--muted);
-    font-size: 13px;
-    margin: 0 0 24px;
+    font-size: 14px;
+    margin: 0 0 22px;
+    font-weight: 600;
   }
 
   /* --- Difficulty select screen --- */
   .level-grid {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    margin-top: 20px;
+    gap: 12px;
+    margin-top: 18px;
   }
 
   .level-card {
-    background: var(--panel-alt);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 14px 16px;
+    border: none;
+    border-radius: 18px;
+    padding: 16px 18px;
     text-align: left;
     cursor: pointer;
-    color: var(--text);
     font-family: inherit;
-    transition: border-color 0.15s ease, transform 0.1s ease;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
   }
 
-  .level-card:hover { transform: translateX(2px); }
+  .level-card:hover { transform: translateY(-2px) scale(1.01); }
 
-  .level-card .name { font-size: 14px; font-weight: 500; margin: 0 0 2px; }
-  .level-card .desc { font-size: 12px; color: var(--muted); margin: 0; }
-  .level-card .count { font-size: 11px; color: var(--muted); white-space: nowrap; }
+  .level-card .name { font-family: "Baloo 2", sans-serif; font-size: 16px; font-weight: 700; margin: 0 0 2px; }
+  .level-card .desc { font-size: 12.5px; margin: 0; opacity: 0.75; font-weight: 600; }
+  .level-card .count {
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+    background: rgba(255,255,255,0.6);
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
 
-  .level-card.easy:hover { border-color: var(--green); }
-  .level-card.medium:hover { border-color: var(--amber); }
-  .level-card.hard:hover { border-color: var(--red); }
-  .level-card.mixed:hover { border-color: var(--blue); }
+  .level-card.easy { background: var(--teal-soft); color: #0d8c7f; box-shadow: 0 4px 14px rgba(34,193,180,0.18); }
+  .level-card.medium { background: var(--orange-soft); color: #c2760c; box-shadow: 0 4px 14px rgba(255,159,67,0.18); }
+  .level-card.hard { background: var(--pink-soft); color: #d13d6b; box-shadow: 0 4px 14px rgba(255,111,156,0.18); }
+  .level-card.mixed { background: var(--purple-soft); color: #7440e0; box-shadow: 0 4px 14px rgba(155,107,255,0.18); }
 
   /* --- Question screen --- */
   .meta-row {
@@ -127,36 +138,41 @@
 
   .tag {
     font-size: 11px;
-    padding: 2px 9px;
-    border-radius: 10px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 999px;
     text-transform: uppercase;
     letter-spacing: 0.03em;
   }
-  .tag-easy { background: rgba(63, 217, 127, 0.12); color: var(--green); }
-  .tag-medium { background: rgba(242, 181, 68, 0.14); color: var(--amber); }
-  .tag-hard { background: rgba(255, 92, 92, 0.12); color: var(--red); }
+
+  .tag-easy { background: var(--teal-soft); color: #0d8c7f; }
+  .tag-medium { background: var(--orange-soft); color: #c2760c; }
+  .tag-hard { background: var(--pink-soft); color: #d13d6b; }
 
   .progress {
     display: flex;
     gap: 6px;
-    margin-bottom: 20px;
+    margin-bottom: 22px;
   }
 
   .progress-dot {
-    height: 4px;
+    height: 6px;
     flex: 1;
-    background: var(--border);
-    border-radius: 2px;
+    background: #f0ebfa;
+    border-radius: 4px;
     overflow: hidden;
   }
 
-  .progress-dot.done { background: var(--green); }
-  .progress-dot.current { background: var(--amber); }
+  .progress-dot.done { background: var(--teal); }
+  .progress-dot.current { background: var(--yellow); }
 
   .question {
-    font-size: 15px;
-    line-height: 1.6;
+    font-family: "Baloo 2", sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.5;
     margin-bottom: 20px;
+    color: var(--ink);
   }
 
   .options {
@@ -166,56 +182,60 @@
   }
 
   .option {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--text);
+    background: #faf8ff;
+    border: 2px solid #f0ebfa;
+    color: var(--ink);
     text-align: left;
-    padding: 12px 14px;
-    border-radius: 6px;
+    padding: 13px 16px;
+    border-radius: 14px;
     font-family: inherit;
-    font-size: 14px;
+    font-weight: 600;
+    font-size: 14.5px;
     cursor: pointer;
-    transition: border-color 0.15s ease, background 0.15s ease;
+    transition: border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
   }
 
   .option:hover:not(:disabled) {
-    border-color: var(--green);
-    background: rgba(63, 217, 127, 0.06);
+    border-color: var(--purple);
+    background: var(--purple-soft);
+    transform: translateX(2px);
   }
 
   .option:disabled { cursor: default; }
 
   .option.correct {
-    border-color: var(--green);
-    background: rgba(63, 217, 127, 0.12);
-    color: var(--green);
+    border-color: var(--teal);
+    background: var(--teal-soft);
+    color: #0d8c7f;
   }
 
   .option.wrong {
-    border-color: var(--red);
-    background: rgba(255, 92, 92, 0.1);
-    color: var(--red);
+    border-color: var(--pink);
+    background: var(--pink-soft);
+    color: #d13d6b;
   }
 
   .feedback {
     margin-top: 16px;
-    font-size: 13px;
+    font-size: 13.5px;
+    font-weight: 700;
     color: var(--muted);
     min-height: 20px;
   }
 
   .next-btn {
     margin-top: 20px;
-    background: var(--green);
-    color: #0d1117;
+    background: linear-gradient(120deg, var(--pink), var(--purple));
+    color: #fff;
     border: none;
-    padding: 10px 18px;
-    border-radius: 6px;
-    font-family: inherit;
-    font-weight: 500;
-    font-size: 13px;
+    padding: 12px 22px;
+    border-radius: 999px;
+    font-family: "Baloo 2", sans-serif;
+    font-weight: 700;
+    font-size: 14px;
     cursor: pointer;
     display: none;
+    box-shadow: 0 6px 16px rgba(155,107,255,0.28);
   }
 
   .next-btn.show { display: inline-block; }
@@ -224,54 +244,59 @@
   .result { text-align: center; }
 
   .result .score {
-    font-size: 44px;
-    color: var(--green);
-    margin: 14px 0 2px;
-    font-weight: 500;
+    font-family: "Baloo 2", sans-serif;
+    font-size: 48px;
+    background: linear-gradient(120deg, var(--pink), var(--purple));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin: 12px 0 2px;
+    font-weight: 800;
   }
 
   .result .score-label {
     color: var(--muted);
-    font-size: 13px;
-    margin-bottom: 20px;
+    font-size: 13.5px;
+    font-weight: 700;
+    margin-bottom: 6px;
   }
 
   .stat-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
-    margin: 0 0 22px;
+    margin: 18px 0 22px;
   }
 
   .stat-card {
-    background: var(--panel-alt);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 12px 8px;
+    background: #faf8ff;
+    border-radius: 14px;
+    padding: 14px 8px;
   }
 
-  .stat-card .value { font-size: 18px; color: var(--text); font-weight: 500; }
-  .stat-card .label { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .stat-card .value { font-family: "Baloo 2", sans-serif; font-size: 20px; color: var(--ink); font-weight: 700; }
+  .stat-card .label { font-size: 11px; color: var(--muted); margin-top: 2px; font-weight: 600; }
 
   .bar-track {
-    height: 8px;
-    background: var(--panel-alt);
-    border: 1px solid var(--border);
-    border-radius: 4px;
+    height: 10px;
+    background: #f0ebfa;
+    border-radius: 999px;
     overflow: hidden;
-    margin-bottom: 22px;
+    margin-bottom: 6px;
   }
 
   .bar-fill {
     height: 100%;
-    background: var(--green);
+    background: linear-gradient(90deg, var(--teal), var(--purple));
     transition: width 0.5s ease;
   }
 
   .result p.verdict {
     font-size: 14px;
-    margin-bottom: 24px;
-    text-align: left;
+    font-weight: 600;
+    margin: 18px 0 24px;
+    text-align: center;
+    color: var(--ink);
   }
 
   .action-row {
@@ -281,52 +306,51 @@
   }
 
   .restart-btn, .change-level-btn {
-    padding: 10px 16px;
-    border-radius: 6px;
-    font-family: inherit;
-    font-size: 13px;
+    padding: 11px 18px;
+    border-radius: 999px;
+    font-family: "Baloo 2", sans-serif;
+    font-weight: 700;
+    font-size: 13.5px;
     cursor: pointer;
+    border: none;
   }
 
   .restart-btn {
-    background: transparent;
-    border: 1px solid var(--green);
-    color: var(--green);
+    background: linear-gradient(120deg, var(--teal), var(--purple));
+    color: #fff;
+    box-shadow: 0 6px 16px rgba(34,193,180,0.25);
   }
-
-  .restart-btn:hover { background: rgba(63, 217, 127, 0.08); }
 
   .change-level-btn {
-    background: transparent;
-    border: 1px solid var(--border);
+    background: #faf8ff;
     color: var(--muted);
+    border: 2px solid #f0ebfa;
   }
 
-  .change-level-btn:hover { border-color: var(--text); color: var(--text); }
+  .change-level-btn:hover { color: var(--purple); border-color: var(--purple-soft); }
 
   @media (prefers-reduced-motion: no-preference) {
-    #screen > * { animation: fadeIn 0.25s ease both; }
+    #screen > * { animation: fadeIn 0.3s ease both; }
   }
 
   @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(4px); }
+    from { opacity: 0; transform: translateY(6px); }
     to { opacity: 1; transform: translateY(0); }
   }
 </style>
 </head>
 <body>
 
-<div class="terminal">
+<div class="app-card">
   <div class="titlebar">
-    <div class="dot r"></div>
-    <div class="dot y"></div>
-    <div class="dot g"></div>
-    <span>quiz.sh</span>
+    <span class="emoji">🛡️</span>
+    <span>CyberQuiz</span>
   </div>
   <div class="screen" id="screen"></div>
 </div>
 
 <script>
+
   // ---- 1. THE DATA ----
   // Every question has a difficulty level, a shuffled-at-render options
   // list, and the CORRECT ANSWER stored as text (not a position) so
@@ -513,9 +537,40 @@
     return copy;
   }
 
+  // ---- HIGH SCORES (localStorage) ----
+  // We store one object under a single key, e.g:
+  // { easy: 4, medium: 3, hard: 2, mixed: 6 }
+  // localStorage only stores strings, so we JSON.stringify() to save
+  // and JSON.parse() to read it back as a real object.
+
+  const HIGH_SCORE_KEY = "quizHighScores";
+
+  function getHighScores() {
+    const raw = localStorage.getItem(HIGH_SCORE_KEY);
+    if (!raw) return {}; // nothing saved yet
+    try {
+      return JSON.parse(raw);
+    } catch (e) {
+      return {}; // corrupted data — fail safe instead of crashing
+    }
+  }
+
+  // Returns true if this run set a NEW high score (so we can show a badge)
+  function saveHighScoreIfBetter(levelKey, newScore) {
+    const scores = getHighScores();
+    const previousBest = scores[levelKey] || 0;
+    if (newScore > previousBest) {
+      scores[levelKey] = newScore;
+      localStorage.setItem(HIGH_SCORE_KEY, JSON.stringify(scores));
+      return true;
+    }
+    return false;
+  }
+
   // ---- 3. RENDER FUNCTIONS ----
 
   function renderIntro() {
+    const highScores = getHighScores();
     screen.innerHTML = `
       <p class="prompt-line">initializing quiz module...</p>
       <h1>Cybersecurity awareness quiz</h1>
@@ -525,13 +580,16 @@
           const count = lvl.key === "mixed"
             ? questionBank.easy.length + questionBank.medium.length + questionBank.hard.length
             : questionBank[lvl.key].length;
+          const totalForLevel = lvl.key === "mixed" ? 8 : count;
+          const best = highScores[lvl.key];
+          const bestLabel = best !== undefined ? `best: ${best}/${totalForLevel}` : `${totalForLevel} Qs`;
           return `
             <button class="level-card ${lvl.key}" onclick="startQuiz('${lvl.key}')">
               <div>
                 <p class="name" style="color:${lvl.color}">${lvl.name}</p>
                 <p class="desc">${lvl.desc}</p>
               </div>
-              <span class="count">${lvl.key === "mixed" ? 8 : count} Qs</span>
+              <span class="count">${bestLabel}</span>
             </button>
           `;
         }).join("")}
@@ -576,11 +634,17 @@
     if (pct === 100) verdict = "Perfect score. You'd spot a phishing email in your sleep.";
     else if (pct < 50) verdict = "Worth a review — small habits prevent big breaches.";
 
+    const isNewBest = saveHighScoreIfBetter(selectedLevel, score);
+    const bestBadge = isNewBest
+      ? `<p style="color: var(--amber); font-size: 12px; margin: 0 0 14px;">&#9733; New high score for ${selectedLevel}!</p>`
+      : "";
+
     screen.innerHTML = `
       <div class="result">
         <p class="prompt-line">quiz complete &middot; ${selectedLevel}</p>
         <p class="score">${score}/${questions.length}</p>
         <p class="score-label">${pct}% correct</p>
+        ${bestBadge}
         <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
         <div class="stat-grid">
           <div class="stat-card"><div class="value">${score}</div><div class="label">Correct</div></div>
