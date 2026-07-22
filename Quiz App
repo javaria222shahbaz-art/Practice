@@ -94,7 +94,6 @@
     gap: 12px;
     margin-top: 18px;
   }
-
   .level-card {
     border: none;
     border-radius: 18px;
